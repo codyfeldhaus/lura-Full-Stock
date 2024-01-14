@@ -1,33 +1,35 @@
 // module imports
 const express = require('express');
-const cors = require('cors');
 const { Pool } = require('pg');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-require('dotenv').config()
+require('dotenv').config();
 
-//express &port app
-const app = express();
-const PORT = process.env.PORT || 3001;
+const router = express.Router();
 
-// middleware
-app.use
-
-app.use(cors()); //resource sharing
-app.use(express.json()); //parsing Json requests
-
-
-// database connection
 const pool = new Pool({
-user: 'postgres',
-host: 'localhost',
-database: 'Full_Stock',
-password: process.env.DB_PASSWORD,
-port: 5432 
+  //user: 'your_db_user',
+  host: 'localhost',
+  database: 'your_db_name',
+  password: process.env.DB_PASSWORD,
+  port: 5432,
 });
 
-// add routes in this section
+router.post('/register', async (req, res) => {
+  const { username, password } = req.body;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  // Validate username and password if needed
+
+  // Hash the password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Insert the user into the database
+  try {
+    await pool.query('INSERT INTO users (username, password) VALUES ($1, $2)', [username, hashedPassword]);
+    res.status(201).send('User registered successfully');
+  } catch (error) {
+    console.error('Error during registration:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
+
+module.exports = router;

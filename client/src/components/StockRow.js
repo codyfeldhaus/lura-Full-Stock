@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-//const axios = require('axios');
+
+import polygon from './polygon';
 // test
 const API_BASE_URL = 'https://api.polygon.io/v1/open-close'
 const API_KEY = '5xHHbQylCoepucqudYPs7vjYd9Meaiuq';
-const ticker = 'AAPL'
-const date = '2024-01-10'
+const ticker = '';
+const date = '';
 const fetchStockByTicker = async (ticker, date) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/${ticker}/${date}`, {
@@ -27,22 +28,51 @@ const fetchStockByTicker = async (ticker, date) => {
 //     })
 
 const StockRow = (props) => {
-    //code state for sockdata
+    //code state case
     const [stockData, setStockData] = useState({
-        price: 5,
-        date: '1-9-24',
-        time: '09:45',
-        companyName: 'Apple',
+        price: 0,
+        date: '',
+        time: '',
+        companyName: '',
     });
 
+    useEffect(() => {
+     //fetch data
+      const fetchStockData = async () => {
+        try {
+          const response = await axios.get(`${API_BASE_URL}/${props.ticker}/${date}`, {
+            params: {
+              apiKey: API_KEY,
+            },
+          });
+  
+          const stockInfo = response.data;
+  
+          // Update state with fetched stock data
+          setStockData({
+            price: stockInfo.close,
+            date: stockInfo.day,
+            time: stockInfo.timestamp,
+            companyName: stockInfo.ticker,
+          });
+        } catch (error) {
+          console.error('Error fetching StockData:', error);
+         
+        }
+      };
+  
+      fetchStockData();
+    }, [props.ticker]); 
+  
     return (
-        <tr>
-            <td>{props.ticker}</td>
-            <td>{stockData.price}</td>
-            <td>{stockData.date}</td>
-            <td>{stockData.time}</td>
-            <td>{stockData.companyName}</td>
-        </tr>
+      <tr>
+        <td>{props.ticker}</td>
+        <td>{stockData.price}</td>
+        <td>{stockData.date}</td>
+        <td>{stockData.time}</td>
+        <td>{stockData.companyName}</td>
+      </tr>
     );
-}
-export default StockRow;
+  };
+  
+  export default StockRow;
