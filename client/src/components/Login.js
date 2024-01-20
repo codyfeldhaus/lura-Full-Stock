@@ -1,27 +1,21 @@
 import React, { useState } from "react";
+import Login from "./login"; // Adjust the import path based on your project structure
 
-function Login({ handleLogin }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+function App() {
+  // Define your handleLogin function here
+  const handleLogin = (username, password) => {
+    // Your login logic goes here
+    console.log(
+      `Logging in with username: ${username} and password: ${password}`
+    );
+  };
 
   return (
     <div>
-      <h1>Login to access Full Stock</h1>
-      <input
-        type='text'
-        placeholder='Username'
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type='password'
-        placeholder='Password'
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={() => handleLogin(username, password)}>Log In</button>
+      <h1>Your App</h1>
+      <Login handleLogin={handleLogin} />
     </div>
   );
 }
 
-export default Login;
+export default App;

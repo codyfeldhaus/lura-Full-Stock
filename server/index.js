@@ -2,9 +2,13 @@
 const express = require('express');
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken'); // Added JWT module
 require('dotenv').config();
 
-const router = express.Router();
+const app = express()
+app.use(cors());
+
+
 
 const pool = new Pool({
   //user: 'your_db_user',
@@ -14,6 +18,24 @@ const pool = new Pool({
   port: 5432,
 });
 
+// Middleware to verify JWT token
+function authenticateToken(req, res, next) {
+  const token = req.header('Authorization');
+
+  if (!token) {
+    return res.sendStatus(401); // Unauthorized
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.sendStatus(403); // Forbidden
+    }
+    req.user = user;
+    next();
+  });
+}
+
+// Registration endpoint
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
@@ -32,4 +54,43 @@ router.post('/register', async (req, res) => {
   }
 });
 
-module.exports = router;
+// Search endpoint with authentication middleware
+router.get('/search', authenticateToken, async (req, res) => {
+  try {
+    const searchQuery = req.query.q.toLowerCase();
+    const { rows } = await pool.query('SELECT * FROM users WHERE LOWER(last_name) = $1', [`${searchQuery}`]);
+    res.json(rows);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Login endpoint
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const { rows } = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+    
+    if (rows.length > 0) {
+      const isValid = await bcrypt.compare(password, rows[0].password);
+
+      if (isValid) {
+        const token = jwt.sign(
+          { username },
+          process.env.JWT_SECRET,
+          { expiresIn: '1h' }
+        );
+        res.json({ token });
+      } else {
+        res.status(403).send('Invalid password');
+      }
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+
