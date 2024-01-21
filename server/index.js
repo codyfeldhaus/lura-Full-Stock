@@ -1,6 +1,7 @@
 // module imports
 const express = require('express');
 const { Pool } = require('pg');
+const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); // Added JWT module
 require('dotenv').config();
@@ -36,7 +37,7 @@ function authenticateToken(req, res, next) {
 }
 
 // Registration endpoint
-router.post('/register', async (req, res) => {
+app.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
   // Validate username and password if needed
@@ -55,7 +56,7 @@ router.post('/register', async (req, res) => {
 });
 
 // Search endpoint with authentication middleware
-router.get('/search', authenticateToken, async (req, res) => {
+app.get('/search', authenticateToken, async (req, res) => {
   try {
     const searchQuery = req.query.q.toLowerCase();
     const { rows } = await pool.query('SELECT * FROM users WHERE LOWER(last_name) = $1', [`${searchQuery}`]);
@@ -66,7 +67,7 @@ router.get('/search', authenticateToken, async (req, res) => {
 });
 
 // Login endpoint
-router.post('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
