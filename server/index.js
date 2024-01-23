@@ -9,12 +9,12 @@ require('dotenv').config();
 const app = express()
 app.use(cors());
 
-
+app.use(express.json());
 
 const pool = new Pool({
-  //user: 'your_db_user',
+  user: 'postgres',
   host: 'localhost',
-  database: 'your_db_name',
+  database: 'full_stock',
   password: process.env.DB_PASSWORD,
   port: 5432,
 });
@@ -38,6 +38,7 @@ function authenticateToken(req, res, next) {
 
 // Registration endpoint
 app.post('/register', async (req, res) => {
+  console.log(req.body);
   const { username, password } = req.body;
 
   // Validate username and password if needed
@@ -94,4 +95,9 @@ app.post('/login', async (req, res) => {
   }
 });
 
+//start our server at given port
+const PORT = process.env.PORT || 3001; //use port specificied in .env if there is one, default to 3001 otherwise
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+})
 

@@ -13,7 +13,8 @@ CREATE TABLE stock_adds(
   add_price DECIMAL(10, 2),
  FOREIGN KEY (user_id) REFERENCES users(id));
 
-
+ALTER TABLE users
+RENAME COLUMN user_id TO username;
   
 
   

@@ -1,4 +1,4 @@
-// Register.js
+
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -9,9 +9,12 @@ const Register = () => {
   const handleRegistration = async () => {
     try {
       // Make an HTTP POST request to your server for registration
-      const response = await axios.post('http://localhost:3001/register', {
-        data: { username, password },
-      });
+      const response = await axios.post('http://localhost:3001/register', 
+        {
+          username: username,
+          password: password 
+        }
+     );
 
       // Handle the response as needed
       console.log('response data: ', response.data);
