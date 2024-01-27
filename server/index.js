@@ -69,20 +69,22 @@ app.get('/search', authenticateToken, async (req, res) => {
 
 // Login endpoint
 app.post('/login', async (req, res) => {
+  console.log('login post handler ran');
   const { username, password } = req.body;
-
+  console.log('username, password', username, password);
   try {
     const { rows } = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
-    
+    console.log('query success');
     if (rows.length > 0) {
       const isValid = await bcrypt.compare(password, rows[0].password);
-
+      console.log('query is valid?', isValid);
       if (isValid) {
         const token = jwt.sign(
           { username },
           process.env.JWT_SECRET,
           { expiresIn: '1h' }
         );
+        console.log('token is here?', token);
         res.json({ token });
       } else {
         res.status(403).send('Invalid password');
