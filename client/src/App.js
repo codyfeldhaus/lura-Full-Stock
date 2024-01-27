@@ -1,10 +1,17 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Register from "./components/Register.js";
-import Home from "./components/Home.js";
-import login from "./components/login.js";
+import React, { useState } from "react";
+import Login from "./components/Login";
 
+const App = () => {
+  
+  const [token, setToken] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  
+  return (
+    <div>
+      
+    </div>
+  );
+};
 
-
-
+export default App;
