@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from "./components/Login";
 import Home from './components/Home';
 import Register from './components/Register';
-import navigation from "./components/navigation";
+import Navigation from './components/Navigation';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   const [token, setToken] = useState('');
@@ -19,29 +20,26 @@ const App = () => {
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/login">Login</Link>
-              </li>
-              <li>
                 <Link to="/register">Register</Link>
               </li>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+              {isLoggedIn && (
+                <li>
+                  <Link to="/Navigation">Navigation</Link>
+                </li>
+              )}
             </ul>
           </nav>
 
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route
-              path="/register"
-              element={<Register />}
-             
-            />
-            <Route
-              path="/login"
-              element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} token={token} setToken={setToken} />}
-            />
-            <Route
-              path="/Navigation"
-              element={<Navigation />}
-            />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} token={token} setToken={setToken} />} />
+            {isLoggedIn && (
+              <Route path="/Navigation" element={<Navigation />} />
+            )}
           </Routes>
 
           <table className="table mt-5">

@@ -1,0 +1,23 @@
+
+//App.js
+useState -> isLoggedIn
+<NavBar isLoggedIn={isLoggedIn} />
+<Router>
+    <Routes>
+        <Route...> (which component to display based on the path)
+        <Route...>
+        <Route '/my-stocks' <MyStocks /> ...>
+    </Routes>
+</Router>
+
+//NavBar.js
+<Link> Home </Link>
+
+{isLoggedIn ? (
+    <Link>My Stocks</Link> /my-stocks (path for your browser to go to)
+    <Link>Search</Link>
+    <Link>Logout</Link>
+) : (
+    <Link>Log In</Link>
+    <Link>Register</Link>
+)} 

@@ -26,7 +26,7 @@ const Register = () => {
 
   return (
     <div>
-      <h1>Register for Full Stock</h1>
+      <h1>Register for stock sense</h1>
       <input
         type='text'
         placeholder='Username'

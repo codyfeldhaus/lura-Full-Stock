@@ -2,7 +2,7 @@ import React from 'react'
 
 const navigation = () => {
   return (
-    <div>navigation</div>
+    <div>Welcome to your home page</div>
   )
 }
 

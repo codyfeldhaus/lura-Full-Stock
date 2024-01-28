@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken }) => {
-  const history = useHistory(); 
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
@@ -23,9 +24,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken }) => {
         const { token } = await response.json();
         setToken(token);
         setIsLoggedIn(true);
-        
-        // Redirect to the new home page or landing page
-        history.push('./Navigation');
+        navigate("/Navigation")
       } else {
         const errorMessage = await response.text();
         alert(`Login failed: ${errorMessage}`);
@@ -41,6 +40,17 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken }) => {
 
   return (
     <div>
+      <div>
+        <Link to="/">
+          <button className="btn btn-primary mr-2">Home</button>
+        </Link>
+        <Link to="/login">
+          <button className="btn btn-primary mr-2">Login</button>
+        </Link>
+        <Link to="/register">
+          <button className="btn btn-primary">Register</button>
+        </Link>
+      </div>
       <label>Username:</label>
       <input
         type="text"
@@ -55,7 +65,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken }) => {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button onClick={handleLogin} disabled={isLoading}>
+      <button onClick={handleLogin} className="btn btn-success" disabled={isLoading}>
         {isLoading ? 'Logging in...' : 'Login'}
       </button>
     </div>

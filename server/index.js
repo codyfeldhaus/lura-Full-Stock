@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken'); // Added JWT module
 require('dotenv').config();
 
 const app = express()
-// middleware
 app.use(cors());
 app.use(express.json());
 // database connection
