@@ -1,51 +1,47 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Login from "./components/Login";
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import Login from './components/Login';
 import Home from './components/Home';
 import Register from './components/Register';
-import Navigation from './components/Navigation';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Logout from './components/Logout';
 
 const App = () => {
-  const [token, setToken] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <Router> 
+    <Router>
       <div className="App">
-        <div className="container">
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/register">Register</Link>
-              </li>
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-              {isLoggedIn && (
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            {!isLoggedIn && (
+              <>
                 <li>
-                  <Link to="/Navigation">Navigation</Link>
+                  <Link to="/register">Register</Link>
                 </li>
-              )}
-            </ul>
-          </nav>
-
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} token={token} setToken={setToken} />} />
-            {isLoggedIn && (
-              <Route path="/Navigation" element={<Navigation />} />
+                <li>
+                  <Link to="/login">Login</Link>
+                </li>
+              </>
             )}
-          </Routes>
+            {isLoggedIn && (
+              <li>
+                <Logout setIsLoggedIn={setIsLoggedIn} />
+              </li>
+            )}
+          </ul>
+        </nav>
 
-          <table className="table mt-5">
-            {/* Stock data table goes stock table.js */}
-          </table>
-        </div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/login"
+            element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}
+          />
+        </Routes>
       </div>
     </Router>
   );
