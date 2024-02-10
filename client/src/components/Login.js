@@ -19,9 +19,10 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken }) => {
         },
         body: JSON.stringify({ username, password }),
       });
-
+      console.log (response);
       if (response.ok) {
         const { token } = await response.json();
+        console.log (token);
         setToken(token);
         setIsLoggedIn(true);
         navigate("/Navigation")

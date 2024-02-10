@@ -2,9 +2,9 @@ import React from 'react';
 
 const Logout = ({ setIsLoggedIn }) => {
   const handleLogout = () => {
-    // Perform logout actions, such as clearing authentication state
+    
     setIsLoggedIn(false);
-    // Optionally, make an API call to logout endpoint on the server
+    
     fetch('/logout', {
       method: 'POST',
     })

@@ -7,25 +7,12 @@ import Logout from './components/Logout';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const [token, setToken ] = useState('');
   return (
     <Router>
       <div className="App">
         <nav>
           <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            {!isLoggedIn && (
-              <>
-                <li>
-                  <Link to="/register">Register</Link>
-                </li>
-                <li>
-                  <Link to="/login">Login</Link>
-                </li>
-              </>
-            )}
             {isLoggedIn && (
               <li>
                 <Logout setIsLoggedIn={setIsLoggedIn} />
@@ -39,7 +26,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route
             path="/login"
-            element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}
+            element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setToken={setToken} />}
           />
         </Routes>
       </div>
