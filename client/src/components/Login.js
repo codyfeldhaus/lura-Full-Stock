@@ -25,7 +25,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken }) => {
         console.log (token);
         setToken(token);
         setIsLoggedIn(true);
-        navigate("/Navigation")
+        navigate("/dashboard")
       } else {
         const errorMessage = await response.text();
         alert(`Login failed: ${errorMessage}`);
