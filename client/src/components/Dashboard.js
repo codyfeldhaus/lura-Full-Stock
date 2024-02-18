@@ -1,12 +1,22 @@
-import React from 'react'
-import Taskbar from './Taskbar'
+import React, { useState } from 'react';
+import Taskbar from './Taskbar'; // Import the Taskbar component
+
 const Dashboard = () => {
+  // State to store search results
+  const [searchResults, setSearchResults] = useState([]);
+
+  // Function to handle search results update
+  const handleSearchResultsUpdate = (results) => {
+    setSearchResults(results);
+  };
+
   return (
     <div>
-        <h1>Dashboard</h1>
-        <Taskbar />
+      {/* Pass searchResults and setSearchResults as props to the Taskbar component */}
+      <Taskbar searchResults={searchResults} setSearchResults={handleSearchResultsUpdate} />
+      {/* Your other dashboard content goes here */}
     </div>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;

@@ -1,6 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+
+import Row from 'react-bootstrap/Row';
+import { Image } from 'react-bootstrap';
+
 
 function Home() {
   return (
@@ -15,10 +21,8 @@ function Home() {
           <button className="btn btn-primary">Register</button>
         </Link>
       </div>
-
-      <table className="table mt-5">
-        {/* Stock data table goes here */}
-      </table>
+      <Image src="image.jpg" className="w-72" fluid rounded />;
+      
     </div>
   );
 }

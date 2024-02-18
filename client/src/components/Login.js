@@ -43,7 +43,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken }) => {
     <div>
       <div>
         <Link to="/">
-          <button className="btn btn-primary mr-2">Home</button>
+         
         </Link>
         <Link to="/login">
           <button className="btn btn-primary mr-2">Login</button>

@@ -89,8 +89,15 @@ console.log (username, password);
 app.post('/logout', (req, res) => {
   res.status(200).send('Logged out successfully');
 });
-
+//query parameter
+app.get('/search', (req, res) => {
+  res.status(200).send('search');
+})
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+
+
+
+
 });
