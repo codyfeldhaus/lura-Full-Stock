@@ -12,7 +12,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      {/* Pass searchResults and setSearchResults as props to the Taskbar component */}
+      
       <Taskbar searchResults={searchResults} setSearchResults={handleSearchResultsUpdate} />
       {/* Your other dashboard content goes here */}
     </div>

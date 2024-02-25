@@ -14,10 +14,20 @@ const Taskbar = ({ searchResults, setSearchResults }) => {
     event.preventDefault();
     try {
       // Make API request using search query
-      const response = await fetch(`https://your-api-url?q=${searchQuery}`);
-      const data = await response.json();
-      // Update search results state with API response data
-      setSearchResults(data);
+      const response = await fetch(`/search?q=${searchQuery}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer YOUR_JWT_TOKEN`, // Replace with your JWT token
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        // Update search results state with API response data
+        setSearchResults(data);
+      } else {
+        console.error('Error fetching search results:', response.statusText);
+      }
     } catch (error) {
       console.error('Error fetching search results:', error);
     }
@@ -43,9 +53,9 @@ const Taskbar = ({ searchResults, setSearchResults }) => {
             </Col>
             {/* Buttons for other functionalities */}
             <Col xs={3} className="d-flex justify-content-end">
-            <Button variant="outline-success" className="mr-2">Home</Button>
+              <Button variant="outline-success" className="mr-2">Home</Button>
               <Button variant="outline-success" className="mr-2">Refresh</Button>
-              <Button variant="outline-danger" className="mr-2">logout</Button>
+              <Button variant="outline-danger" className="mr-2">Logout</Button>
               <div style={{ border: '1px solid red', padding: '5px' }}>Total Portfolio: $1000</div>
             </Col>
           </Row>
