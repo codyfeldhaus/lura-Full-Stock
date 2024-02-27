@@ -3,7 +3,12 @@ require('dotenv').config();
 
 
 const apiCall = async (stockQuery) => {
-    const date = "2023-12-12"; //how to get current date?
+   const currentDate = new Date();
+   //const yesterday = new Date(currentDate.getDate() - 1);
+   //const formattedDate = yesterday.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+   //console.log(yesterday)
+   const formattedDate = "2024-02-05"
+   console.log(formattedDate); 
    try {
       const apiKey = process.env.API_KEY;
       if (!apiKey) {
@@ -11,10 +16,11 @@ const apiCall = async (stockQuery) => {
       }
       
       // Make HTTP request to the API endpoint, passing the API key in the request
-      const response = await axios.get(`https://api.polygon.io/v1/open-close/${stockQuery}/${date}?adjusted=true&apiKey=${apiKey}`)
+      //stockQuery capitalized?
+      const response = await axios.get(`https://api.polygon.io/v1/open-close/${stockQuery.toUpperCase()}/${formattedDate}?adjusted=true&apiKey=${apiKey}`)
       
       // Return the response data
-      console.log(response.data);
+      //console.log(response.data);
       return response.data;
    } catch (error) {
       // Handle any errors

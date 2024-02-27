@@ -12,9 +12,10 @@ const Taskbar = ({ searchResults, setSearchResults }) => {
   // Event handler for handling search submission
   const handleSearchSubmit = async (event) => {
     event.preventDefault();
+    console.log("handSearchSubmit ran");
     try {
       // Make API request using search query
-      const response = await fetch(`/search?q=${searchQuery}`, {
+      const response = await fetch(`http://localhost:3001/search?q=${searchQuery}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer YOUR_JWT_TOKEN`, // Replace with your JWT token
@@ -22,6 +23,8 @@ const Taskbar = ({ searchResults, setSearchResults }) => {
         }
       });
       if (response.ok) {
+        console.log("response ok")
+        console.log(response);
         const data = await response.json();
         // Update search results state with API response data
         setSearchResults(data);
@@ -46,7 +49,7 @@ const Taskbar = ({ searchResults, setSearchResults }) => {
                   placeholder="Search" 
                   value={searchQuery} 
                   onChange={handleSearchInputChange} 
-                  className="w-100" // Adjust the width of the search field
+                  className="w-100" // width of the search field
                 />
                 <Button variant="outline-primary" type="submit">Search</Button>
               </Form>

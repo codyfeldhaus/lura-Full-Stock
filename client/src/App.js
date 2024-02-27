@@ -14,16 +14,6 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <nav>
-          <ul>
-            {isLoggedIn && (
-              <li>
-                <Logout setIsLoggedIn={setIsLoggedIn} />
-              </li>
-            )}
-          </ul>
-        </nav>
-
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />

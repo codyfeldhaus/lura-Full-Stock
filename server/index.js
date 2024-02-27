@@ -47,11 +47,44 @@ app.post('/register', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+console.log (username, password);
+  try {
+    const { rows } = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+    console.log (rows);
+    if (rows.length > 0) {
+      const isValid = await bcrypt.compare(password, rows[0].password);
+      console.log (isValid);
+      if (isValid) {
+        const token = jwt.sign(
+          { username },
+          process.env.JWT_SECRET,
+          { expiresIn: '1h' }
+        );
+        console.log (token);
+        res.json({ token });
+      } else {
+        res.status(403).send('Invalid password');
+      }
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
+// Logout endpoint
+app.post('/logout', (req, res) => {
+  res.status(200).send('Logged out successfully');
+});
 
-app.get('/search', authenticateToken, async (req, res) => {
+app.get('/search', async (req, res) => {
+  console.log("server search")
   try {
     const searchQuery = req.query.q.toLowerCase();
+    console.log("search query:", searchQuery);
    
     const responseData = await apiCall(searchQuery);
 
