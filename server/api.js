@@ -3,7 +3,7 @@ require('dotenv').config();
 
 
 const apiCall = async (stockQuery) => {
-   const currentDate = new Date();
+   const currentDate = new Date()
    //const yesterday = new Date(currentDate.getDate() - 1);
    //const formattedDate = yesterday.toISOString().split('T')[0]; // Format to YYYY-MM-DD
    //console.log(yesterday)
@@ -25,7 +25,7 @@ const apiCall = async (stockQuery) => {
    } catch (error) {
       // Handle any errors
       console.error('Error fetching data:', error);
-      // Return null or throw the error, depending on how you want to handle it
+      
       return null;
    }
 }
@@ -34,3 +34,23 @@ const apiCall = async (stockQuery) => {
 module.exports = apiCall;
 //comment out line 30 when testing app
 //apiCall("AAPL");
+
+
+
+
+
+
+
+
+// const apiCall = async (stockQuery) => {
+//    const options = {
+//        year: 'numeric',
+//        month: '2-digit',
+//        day: '2-digit',
+//        hour: '2-digit',
+//        minute: '2-digit',
+//        second: '2-digit',
+//        timeZone: 'America/New_York' // Eastern Standard Time (EST)
+//    };
+//    const currentDate = new Date().toLocaleString('en-US', options);
+//    console.log(currentDate); // Output current date in EST format
