@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Navbar, Button, Form, FormControl, Container, Row, Col } from 'react-bootstrap';
 
-const Taskbar = ( ) => {
+const Taskbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState('');
+
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -30,12 +31,12 @@ const Taskbar = ( ) => {
   };
 
   const handleLogout = () => {
-    
+    // Add your logout logic here
     window.location.href = '/login'; 
   };
 
   const handleRefreshClick = () => {
-    setSearchQuery(''); 
+    setSearchQuery(''); // Clear search field
   };
 
   return (
@@ -54,7 +55,7 @@ const Taskbar = ( ) => {
                 />
               </Form>
             </Col>
-            <Col xs={4} className="text-center">
+            <Col xs={4} className="d-flex justify-content-left">
               <Button variant="outline-primary" type="submit" onClick={handleSearchSubmit}>Search</Button>
             </Col>
             <Col xs={4} className="d-flex justify-content-end">
@@ -62,13 +63,19 @@ const Taskbar = ( ) => {
               <Button variant="outline-success" className="mr-2" onClick={handleRefreshClick}>Refresh</Button>
               <Button variant="outline-danger" className="mr-2" onClick={handleLogout}>Logout</Button>
               <div style={{ border: '1px solid red', padding: '5px' }}>Total Portfolio: $1000</div>
+              </Col>
+          </Row>
+          {/* Display search results */}
+          <Row className="mt-3">
+            <Col xs={4}></Col> {/* Empty column to offset search results */}
+            <Col xs={8}>
+              {/* <p>
+                {searchResults && searchResults.map((result, index) => (
+                  <span key={index}>{result.title}</span>
+                ))}
+              </p> */}
+              <p>{searchResults.symbol} opened at ${searchResults.openPrice}.</p>
             </Col>
-            </Col>
-            <Col xs={4} className="text-center">
-              <
-
-            </Col>
-
           </Row>
         </Container>
       </Navbar.Collapse>
