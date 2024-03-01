@@ -16,5 +16,12 @@ CREATE TABLE stock_adds(
 ALTER TABLE users
 RENAME COLUMN user_id TO username;
   
+INSERT INTO stock_adds (user_id, symbol, company_name, add_price)
+VALUES
+(1, 'AAPL', 'Apple', 108),
+(1, 'TSLA', 'Tesla', 200),
+(1, 'MSFT', 'Microsoft', 150),
+(4, 'TSLA', 'Tesla', 200),
+(5, 'MSFT', 'Microsoft', 150);
 
   

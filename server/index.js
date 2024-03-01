@@ -28,19 +28,20 @@ function authenticateToken(req, res, next) {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
-      return res.sendStatus(403); 
+      return res.sendStatus(403); // Forbidden
     }
     req.user = user;
     next();
   });
 }
 
-// add a stock to the user's dashboard
+// Route to add a stock to the user's dashboard
 app.post('/api/dashboard/stocks', authenticateToken, async (req, res) => {
   try {
+    // Extract the stock data from the request body
     const { symbol, openPrice } = req.body;
 
-   
+    // TODO: Add the stock to the user's dashboard in the database
 
     res.status(200).json({ message: 'Stock added to dashboard successfully' });
   } catch (error) {
@@ -48,6 +49,8 @@ app.post('/api/dashboard/stocks', authenticateToken, async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+// Other routes for registration, login, logout, and search remain unchanged...
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
