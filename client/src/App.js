@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Home from './components/Home';
 import Register from './components/Register';
-import Logout from './components/Logout';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard'; // Import the Dashboard component
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [token, setToken ] = useState('');
-  
+  const [token, setToken] = useState('');
+
   return (
     <Router>
       <div className="App">
@@ -21,7 +20,11 @@ const App = () => {
             path="/login"
             element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setToken={setToken} />}
           />
-          <Route path="/dashboard" element={<Dashboard />} />
+          {/* Pass the isLoggedIn and token props to the Dashboard component */}
+          <Route
+            path="/dashboard"
+            element={<Dashboard isLoggedIn={isLoggedIn} token={token} />}
+          />
         </Routes>
       </div>
     </Router>

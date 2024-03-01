@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
 import { Navbar, Button, Form, FormControl, Container, Row, Col } from 'react-bootstrap';
 
-const Taskbar = () => {
+const Taskbar = ({ onStockAdd }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState('');
 
@@ -39,12 +40,18 @@ const Taskbar = () => {
     setSearchQuery(''); // Clear search field
   };
 
+  const handleAddToDashboard = () => {
+    if (searchResults) {
+      onStockAdd(searchResults);
+    }
+  };
+
   return (
     <Navbar bg="light" expand="lg" className="border-bottom">
       <Navbar.Collapse id="basic-navbar-nav">
         <Container fluid>
           <Row className="align-items-center">
-            <Col xs={4}>
+            <Col xs={3}>
               <Form onSubmit={handleSearchSubmit}>
                 <FormControl 
                   type="text" 
@@ -55,26 +62,23 @@ const Taskbar = () => {
                 />
               </Form>
             </Col>
-            <Col xs={4} className="d-flex justify-content-left">
+            <Col xs={1} className="d-flex justify-content-left">
               <Button variant="outline-primary" type="submit" onClick={handleSearchSubmit}>Search</Button>
             </Col>
-            <Col xs={4} className="d-flex justify-content-end">
+            <Col xs={2} className="text-center">
+              {searchResults && (
+                <div style={{ border: '1px solid black', padding: '10px', position: 'relative' }}>
+                  <p>{searchResults.symbol} opened at ${searchResults.openPrice}.</p>
+                  {/* Add more details or formatting for your search results here */}
+                  <Button variant="outline-secondary" style={{ position: 'absolute', top: 0, right: 0 }} onClick={handleAddToDashboard}>+</Button>
+                </div>
+              )}
+            </Col>
+            <Col xs={6} className="d-flex justify-content-end">
               <Button variant="outline-success" className="mr-2">Home</Button>
               <Button variant="outline-success" className="mr-2" onClick={handleRefreshClick}>Refresh</Button>
               <Button variant="outline-danger" className="mr-2" onClick={handleLogout}>Logout</Button>
               <div style={{ border: '1px solid red', padding: '5px' }}>Total Portfolio: $1000</div>
-              </Col>
-          </Row>
-          {/* Display search results */}
-          <Row className="mt-3">
-            <Col xs={4}></Col> {/* Empty column to offset search results */}
-            <Col xs={8}>
-              {/* <p>
-                {searchResults && searchResults.map((result, index) => (
-                  <span key={index}>{result.title}</span>
-                ))}
-              </p> */}
-              <p>{searchResults.symbol} opened at ${searchResults.openPrice}.</p>
             </Col>
           </Row>
         </Container>
