@@ -10,6 +10,7 @@ const Taskbar = ({ onStockAdd }) => {
     setSearchQuery(event.target.value);
   };
 
+
   const handleSearchSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -32,7 +33,6 @@ const Taskbar = ({ onStockAdd }) => {
   };
 
   const handleLogout = () => {
-    // Add your logout logic here
     window.location.href = '/login'; 
   };
 
@@ -42,13 +42,13 @@ const Taskbar = ({ onStockAdd }) => {
 
   const handleAddToDashboard = () => {
     if (searchResults) {
+    fetch
       onStockAdd(searchResults);
     }
   };
-
-  return (
+    return (
     <Navbar bg="light" expand="lg" className="border-bottom">
-      <Navbar.Collapse id="basic-navbar-nav">
+    <Navbar.Collapse id="basic-navbar-nav">
         <Container fluid>
           <Row className="align-items-center">
             <Col xs={3}>
@@ -62,7 +62,7 @@ const Taskbar = ({ onStockAdd }) => {
                 />
               </Form>
             </Col>
-            <Col xs={1} className="d-flex justify-content-left">
+             <Col xs={1} className="d-flex justify-content-left">
               <Button variant="outline-primary" type="submit" onClick={handleSearchSubmit}>Search</Button>
             </Col>
             <Col xs={2} className="text-center">
@@ -72,7 +72,7 @@ const Taskbar = ({ onStockAdd }) => {
                   {/* Add more details or formatting for your search results here */}
                   <Button variant="outline-secondary" style={{ position: 'absolute', top: 0, right: 0 }} onClick={handleAddToDashboard}>+</Button>
                 </div>
-              )}
+        )}
             </Col>
             <Col xs={6} className="d-flex justify-content-end">
               <Button variant="outline-success" className="mr-2">Home</Button>
@@ -84,7 +84,5 @@ const Taskbar = ({ onStockAdd }) => {
         </Container>
       </Navbar.Collapse>
     </Navbar>
-  );
-}
-
-export default Taskbar;
+  )};
+  export default Taskbar;
