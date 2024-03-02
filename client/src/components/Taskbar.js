@@ -4,7 +4,7 @@ import { Navbar, Button, Form, FormControl, Container, Row, Col } from 'react-bo
 
 const Taskbar = ({ onStockAdd }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState('');
+  const [searchResults, setSearchResults] = useState({});
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -40,10 +40,26 @@ const Taskbar = ({ onStockAdd }) => {
     setSearchQuery(''); // Clear search field
   };
 
-  const handleAddToDashboard = () => {
+  const handleAddToDashboard = async() => {
     if (searchResults) {
-    fetch
-      onStockAdd(searchResults);
+    try {
+      const response = await fetch('http://localhost:3001/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ openPrice: searchResults.openPrice, symbol: searchResults.symbol }),
+      });
+      console.log (response);
+      if (response.ok) {
+        onStockAdd(searchResults);
+        alert ('success');
+      }
+
+    } catch (error) {
+        alert (error); 
+    }
+      
     }
   };
     return (

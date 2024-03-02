@@ -38,10 +38,10 @@ function authenticateToken(req, res, next) {
 // Route to add a stock to the user's dashboard
 app.post('/api/dashboard/stocks', authenticateToken, async (req, res) => {
   try {
-    // Extract the stock data from the request body
+    
     const { symbol, openPrice } = req.body;
 
-    // TODO: Add the stock to the user's dashboard in the database
+    
 
     res.status(200).json({ message: 'Stock added to dashboard successfully' });
   } catch (error) {
@@ -76,6 +76,19 @@ console.log (username, password);
     res.status(500).send(error.message);
   }
 });
+// Registration endpoint
+app.post('/register', async (req, res) => {
+  console.log(req.body);
+  const { username, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  try {
+  await pool.query('INSERT INTO users (username, password) VALUES ($1, $2)', [username,hashedPassword]);
+  res.status(200).send("registered successfully") 
+  } catch (error) {
+    console.error('Error during registration', error);
+    res.status(500).send('Internal Server Error');
+  }
+})
 
 // Logout endpoint
 app.post('/logout', (req, res) => {
@@ -100,7 +113,9 @@ app.get('/search', async (req, res) => {
     res.status(500).send(error);
   }
 });
-
+app.post('/add', async(req, res) => {
+  
+})
 
 
 const PORT = process.env.PORT || 3001;
