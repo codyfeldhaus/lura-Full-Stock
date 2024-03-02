@@ -113,9 +113,17 @@ app.get('/search', async (req, res) => {
     res.status(500).send(error);
   }
 });
-app.post('/add', async(req, res) => {
-  
-})
+app.post('/add', async (req, res) => {
+  console.log(req.body);
+  const { openPrice, symbol } = req.body; 
+  try {
+    await pool.query('INSERT INTO stock_adds (openPrice, symbol) VALUES ($1, $2)', [openPrice, symbol]);
+    res.status(200).send("Stock added successfully");
+  } catch (error) {
+    console.error('Error during stock add:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 
 const PORT = process.env.PORT || 3001;
