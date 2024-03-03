@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Taskbar from './Taskbar'; 
+import StockCard from './StockCard';
 
 const Dashboard = () => {
   const [selectedStocks, setSelectedStocks] = useState([]);
@@ -37,15 +38,16 @@ const Dashboard = () => {
   return (
     <div>
       <Taskbar onStockAdd={addStockToDashboard} />
-      <div>
+      <div className='container'>
         <h2 style={{ textAlign: 'center' }}>Selected Stocks</h2>
-        <ul>
+        <ul className='mt-5'>
           {selectedStocks.map((stock, index) => {
-            console.log('Open price for stock', stock.symbol, 'is', stock.add_price);
+            console.log('Open price for stock', stock.symbol, 'is', stock.open);
             return (
-              <li key={index}>
-                {stock.symbol} add {stock.openPrice} close {stock.close} high {stock.high} low {stock.low}
-              </li>
+              // <li key={index}>
+              //   {stock.symbol} add {stock.open} close {stock.close} high {stock.high} low {stock.low}
+              // </li>
+              <StockCard stock={stock} />
             );
           })}
         </ul>
