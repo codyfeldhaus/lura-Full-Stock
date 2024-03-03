@@ -1,46 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'; // Import necessary components from 'react-router-dom'
+
 import App from './App';
-import Home from './components/Home';
-import Register from './components/Register';
-import Login from './components/Login';
-
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Router> 
-      <div className="App">
-        <div className="container">
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-              <li>
-                <Link to="/register">Register</Link>
-              </li>
-              {/* Add link to register */}
-            </ul>
-          </nav>
-
-          <Routes>// put in app.js
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} /> 
-          </Routes>
-
-          <table className="table mt-5">
-            {/* Stock data table goes stock table.js */}
-          </table>
-        </div>
-      </div>
-    </Router>
+   <App />
   </React.StrictMode>
 );
 

@@ -5,19 +5,25 @@ import axios from 'axios';
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [registrationMessage, setRegistrationMessage] = useState('');
 
   const handleRegistration = async () => {
     try {
-      // Make an HTTP POST request to your server for registration
+      // Make an HTTP POST request 
       const response = await axios.post('http://localhost:3001/register', 
         {
           username: username,
           password: password 
         }
-     );
+      );
 
-      // Handle the response as needed
+      
       console.log('response data: ', response.data);
+      
+      setRegistrationMessage(response.data.message);
+      // Clear input fields after successful registration
+      setUsername('');
+      setPassword('');
     } catch (error) {
       // Handle errors
       console.error('Error during registration:', error);
@@ -26,24 +32,31 @@ const Register = () => {
 
   return (
     <div>
-      <h1>Register for Full Stock</h1>
-      <input
-        type='text'
-        placeholder='Username'
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type='password'
-        placeholder='Password'
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleRegistration}>Register</button>
+      <h1>Register for Stock Sense</h1>
+      <form>
+        <div>
+          <label>Username:</label>
+          <input
+            type='text'
+            placeholder='Enter username'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input
+            type='password'
+            placeholder='Enter password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button type="button" onClick={handleRegistration}>Register</button>
+      </form>
+      {registrationMessage && <p>{registrationMessage}</p>}
     </div>
   );
 };
-
-
 
 export default Register;

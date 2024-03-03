@@ -1,16 +1,33 @@
-import React, { useState } from "react";
-import Login from "./components/Login";
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/Login';
+import Home from './components/Home';
+import Register from './components/Register';
+import Dashboard from './components/Dashboard'; // Import the Dashboard component
 
 const App = () => {
-  
-  const [token, setToken] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState('');
 
-  
   return (
-    <div>
-      
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/login"
+            element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setToken={setToken} />}
+          />
+          {/* Pass the isLoggedIn and token props to the Dashboard component */}
+          <Route
+            path="/dashboard"
+            element={<Dashboard isLoggedIn={isLoggedIn} token={token} />}
+          />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
