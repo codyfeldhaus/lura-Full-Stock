@@ -24,4 +24,7 @@ VALUES
 (4, 'TSLA', 'Tesla', 200),
 (5, 'MSFT', 'Microsoft', 150);
 
-  
+ ALTER TABLE stock_adds
+ADD COLUMN close DECIMAL(10, 1),
+ADD COLUMN high DECIMAL(10, 1),
+ADD COLUMN low DECIMAL(10, 1); 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import polygon from './polygon';
-// test
+
 const API_BASE_URL = 'https://api.polygon.io/v1/open-close'
 const API_KEY = '5xHHbQylCoepucqudYPs7vjYd9Meaiuq';
 const ticker = '';
