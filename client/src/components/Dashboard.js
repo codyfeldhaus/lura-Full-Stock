@@ -44,7 +44,7 @@ const Dashboard = () => {
             console.log('Open price for stock', stock.symbol, 'is', stock.add_price);
             return (
               <li key={index}>
-                {stock.symbol} add {stock.openPrice} close {stock.close} high {stock.high} low {stock.low}
+                {stock.symbol} company {stock.name} add {stock.openPrice} close {stock.close} high {stock.high} low {stock.low}
               </li>
             );
           })}

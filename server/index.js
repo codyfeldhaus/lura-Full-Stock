@@ -97,6 +97,7 @@ app.get('/search', async (req, res) => {
     const responseData = await apiCall(searchQuery);
     const openPrice = responseData.open;
     const symbol = responseData.symbol; 
+    const name = responseData.name
     const close = responseData.close;
     const high = responseData.high;
     const low = responseData.low;
@@ -127,9 +128,9 @@ app.get('/dashboard/stocks', async (req, res) => {
 })
 
 app.post('/add', async (req, res) => {
-  const { openPrice, symbol, close, high, low } = req.body; 
+  const { openPrice, symbol, name, close, high, low } = req.body; 
   try {
-    await pool.query('INSERT INTO stock_adds (add_price, symbol, close, high, low, user_id, company_name) VALUES ($1, $2, $3, $4, $5, $6, $7)', [openPrice, symbol, close, high, low, 1, "COMPANY"]);
+    await pool.query('INSERT INTO stock_adds (add_price, symbol, name, close, high, low, user_id, ) VALUES ($1, $2, $3, $4, $5, $6, $7)', [openPrice, symbol, "company", close, high, low, 1, ]);
     res.status(200).send("Stock added successfully");
   } catch (error) {
     console.error('Error during stock add:', error);

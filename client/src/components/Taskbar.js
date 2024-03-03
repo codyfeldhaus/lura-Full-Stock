@@ -51,6 +51,7 @@ const Taskbar = ({ onStockAdd }) => {
         body: JSON.stringify({ 
           openPrice: searchResults.openPrice, 
           symbol: searchResults.symbol,
+          name: searchResults.name,
           close: searchResults.close,
           high: searchResults.high,
           low: searchResults.low, 
