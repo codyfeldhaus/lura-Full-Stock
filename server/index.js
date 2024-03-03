@@ -4,7 +4,7 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const apiCall = require('./api'); // Import the apiCall function
+const { apiCall, apiCallGetCompany } = require('./api'); // Import the apiCall function
 
 const app = express();
 app.use(cors());
@@ -103,8 +103,12 @@ app.get('/search', async (req, res) => {
     const close = responseData.close;
     const high = responseData.high;
     const low = responseData.low;
-    console.log("app.get /search responseData.open: ", responseData.open);
-    res.json({ open, symbol, close, high, low });
+    const nameResponseData = await apiCallGetCompany(searchQuery);
+    const company_name = nameResponseData.results.name;
+    console.log("company name:", company_name);
+    console.log("nameResponseData: ", nameResponseData.results);
+    // console.log("app.get /search responseData.open: ", responseData.open);
+    res.json({ open, symbol, close, high, low, company_name });
   } catch (error) {
     console.error('Error: Response data is null or missing open property');
     console.error('Error during search:', error);
@@ -114,11 +118,11 @@ app.get('/search', async (req, res) => {
 
 
 app.get('/dashboard/stocks', async (req, res) => {
-  console.log("app.get /db/stocks reached");
+  // console.log("app.get /db/stocks reached");
   try {
     const query = 'SELECT * FROM stock_adds';
     const { rows } = await pool.query(query);
-    console.log("returned rows:", rows);
+    // console.log("returned rows:", rows);
     res.status(200).json(rows);
     
   } catch (error) {
@@ -130,14 +134,27 @@ app.get('/dashboard/stocks', async (req, res) => {
 })
 
 app.post('/add', async (req, res) => {
-  const { open, symbol, close, high, low } = req.body; 
+  const { open, symbol, close, high, low, company_name } = req.body; 
+  console.log("/post add req.body", req.body);
   try {
-    await pool.query('INSERT INTO stock_adds (open, symbol, close, high, low, user_id, company_name) VALUES ($1, $2, $3, $4, $5, $6, $7)', [open, symbol, close, high, low, 1, "COMPANY"]);
+    await pool.query('INSERT INTO stock_adds (open, symbol, close, high, low, user_id, company_name) VALUES ($1, $2, $3, $4, $5, $6, $7)', [open, symbol, close, high, low, 1, company_name]);
     res.status(200).send("Stock added successfully");
   } catch (error) {
     console.error('Error during stock add:', error);
     res.status(500).send('Internal Server Error');
   }
+});
+
+app.delete('/delete', async (req, res) => {
+  console.log("delete reached");
+  const { stockId } = req.body;
+  try {
+    await pool.query('DELETE FROM stock_adds WHERE id = $1', [stockId]);
+    res.send("delete query ran success, check db to be sure");
+  }catch (error) {
+    console.error("error deleting: ", error);
+    res.status(500).send("Internal Server Error");
+  }  
 });
 
 const PORT = process.env.PORT || 3001;

@@ -5,10 +5,38 @@ import StockCard from './StockCard';
 
 const Dashboard = () => {
   const [selectedStocks, setSelectedStocks] = useState([]);
+  const [portfolioTotal, setPortfolioTotal] = useState(0);
+
+  useEffect(() => {
+    const total = selectedStocks.reduce((accumulator, currentValue) => {
+      return accumulator + parseFloat(currentValue.open);
+    }, 0);
+    setPortfolioTotal(total.toFixed(2));
+  }, [selectedStocks])
+  
 
   const addStockToDashboard = (stock) => {
     setSelectedStocks([...selectedStocks, stock]);
   };
+
+  const removeStock = async (stockId) => {
+    console.log("removeStock ran, stockId:", stockId)
+    try {
+      await fetch('http://localhost:3001/delete/', {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer YOUR_JWT_TOKEN`, // Replace with your JWT token
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ stockId })
+      })
+
+      setSelectedStocks((prevStocks) => prevStocks.filter((stock) => stock.id !== stockId))
+
+    } catch (error) {
+      console.error("removeStock error:", error);
+    }
+  }
 
   useEffect(() => {
     console.log("useEffect in Dashboard.js ran");
@@ -37,7 +65,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Taskbar onStockAdd={addStockToDashboard} />
+      <Taskbar onStockAdd={addStockToDashboard} portfolioTotal={portfolioTotal} />
       <div className='container'>
         <h2 style={{ textAlign: 'center' }}>Selected Stocks</h2>
         <ul className='mt-5'>
@@ -47,7 +75,7 @@ const Dashboard = () => {
               // <li key={index}>
               //   {stock.symbol} add {stock.open} close {stock.close} high {stock.high} low {stock.low}
               // </li>
-              <StockCard stock={stock} />
+              <StockCard stock={stock} handleDelete={removeStock}/>
             );
           })}
         </ul>
