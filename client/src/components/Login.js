@@ -13,15 +13,17 @@ const Login = ({isLoggedIn, setIsLoggedIn, token, setToken}) => {
         },
         body: JSON.stringify({ username, password })
       });
-
+      console.log("response: ", response);
       if (response.ok) {
         const { token } = await response.json();
+        console.log("token:", token);
         setToken(token);
         setIsLoggedIn(true);
       } else {
         alert("Login failed!");
       }
     } catch (error) {
+      console.error(error);
       alert('An error occurred while logging in.');
     }
   };

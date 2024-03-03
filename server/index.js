@@ -15,8 +15,8 @@ const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'full_stock',
-  password: process.env.DB_PASSWORD,
-  port: 5432,
+  password: 'postgres_pass',
+  port: 5433,
 });
 
 // Middleware to verify JWT token
@@ -69,13 +69,18 @@ app.get('/search', authenticateToken, async (req, res) => {
 
 // Login endpoint
 app.post('/login', async (req, res) => {
+  console.log("server login post request handler");
   const { username, password } = req.body;
+  console.log("username, password: ", username, password);
 
   try {
+    console.log("server try reached")
     const { rows } = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
-    
+    console.log("server query success");
     if (rows.length > 0) {
+      console.log("rows exists");
       const isValid = await bcrypt.compare(password, rows[0].password);
+      console.log("isValid?", isValid);
 
       if (isValid) {
         const token = jwt.sign(
