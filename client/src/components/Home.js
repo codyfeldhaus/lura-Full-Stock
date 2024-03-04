@@ -21,7 +21,6 @@ function Home() {
           <button className="btn btn-primary">Register</button>
         </Link>
       </div>
-      <Image src="image.jpg" className="w-72" fluid rounded />;
       
     </div>
   );

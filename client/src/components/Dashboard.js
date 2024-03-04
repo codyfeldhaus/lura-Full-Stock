@@ -1,12 +1,19 @@
 
 import React, { useState, useEffect } from 'react';
-import Taskbar from './Taskbar'; 
+import Taskbar from './Taskbar';
+import StockCard from './Stockcard';
 
 const Dashboard = () => {
   const [selectedStocks, setSelectedStocks] = useState([]);
 
   const addStockToDashboard = (stock) => {
     setSelectedStocks([...selectedStocks, stock]);
+  };
+
+  const removeStockFromDashboard = (index) => {
+    const newSelectedStocks = [...selectedStocks];
+    newSelectedStocks.splice(index, 1);
+    setSelectedStocks(newSelectedStocks);
   };
 
   useEffect(() => {
@@ -23,7 +30,7 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log('Fetched stock data:', data); 
+          console.log('Fetched stock data:', data);
           setSelectedStocks(data);
         }
       } catch (error) {
@@ -31,8 +38,8 @@ const Dashboard = () => {
       }
     };
     console.log("useEffect helper loaded");
-    fetchStockData(); 
-  }, []); 
+    fetchStockData();
+  }, []);
 
   return (
     <div>
@@ -41,16 +48,25 @@ const Dashboard = () => {
         <h2 style={{ textAlign: 'center' }}>Selected Stocks</h2>
         <ul>
           {selectedStocks.map((stock, index) => {
-            console.log('Open price for stock', stock.symbol, 'is', stock.add_price);
+            console.log('Open price for stock', stock.symbol, 'is', stock.open);
             return (
               <li key={index}>
-                {stock.symbol} company {stock.name} add {stock.openPrice} close {stock.close} high {stock.high} low {stock.low}
+                {stock.symbol} company {stock.company_name} add {stock.open} close {stock.close} high {stock.high} low {stock.low}
+                <button onClick={() => removeStockFromDashboard(index)}
+                className="btn btn-danger rounded-circle"
+                >
+                    x   
+
+                </button>
+
               </li>
             );
           })}
         </ul>
       </div>
+
     </div>
   );
-        }
+}
+
 export default Dashboard;

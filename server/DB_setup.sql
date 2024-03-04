@@ -10,7 +10,7 @@ CREATE TABLE stock_adds(
  user_id INT NOT NULL,
   symbol VARCHAR(20) NOT NULL,
   company_name VARCHAR(100) NOT NULL,
-  add_price DECIMAL(10, 2),
+ open DECIMAL(10, 2),
  FOREIGN KEY (user_id) REFERENCES users(id));
 
 ALTER TABLE users
@@ -25,6 +25,16 @@ VALUES
 (5, 'MSFT', 'Microsoft', 150);
 
  ALTER TABLE stock_adds
-ADD COLUMN close DECIMAL(10, 1),
-ADD COLUMN high DECIMAL(10, 1),
-ADD COLUMN low DECIMAL(10, 1); 
+ADD COLUMN close DECIMAL(10, 2),
+ADD COLUMN high DECIMAL(10, 2),
+ADD COLUMN low DECIMAL(10, 2); 
+
+ALTER TABLE stock_adds
+ALTER COLUMN close TYPE DECIMAL(10, 2);
+ALTER TABLE stock_adds
+ALTER COLUMN high TYPE DECIMAL(10, 2);
+ALTER TABLE stock_adds
+ALTER COLUMN low TYPE DECIMAL(10, 2);
+
+ALTER TABLE stock_adds
+RENAME COLUMN add_price TO open;

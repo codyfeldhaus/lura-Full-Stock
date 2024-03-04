@@ -44,19 +44,27 @@ const apiCall = async (stockQuery) => {
    }
 }
 
-//comment out like 28 when just testing file
-module.exports = apiCall;
-//comment out line 30 when testing app
-//apiCall("AAPL");
+const apiCallGetCompanyName = async (stockQuery) => {
+   try {
+      const apiKey = process.env.API_KEY;
+      if (!apiKey) {
+         throw new Error('API key is not provided');
+      }
+    
+      const response = await axios.get(`https://api.polygon.io/v3/reference/tickers/${stockQuery.toUpperCase()}?apiKey=${apiKey}`)
+      
+      
+      return response.data;
+   } catch (error) {
+      // Handle any errors
+      console.error('Error fetching data:', error);
+      
+      return null;
+   }
+}
 
+module.exports = { apiCall, apiCallGetCompanyName }
 
-
-
-
-
-
-
-// const apiCall = async (stockQuery) => {
 //    const options = {
 //        year: 'numeric',
 //        month: '2-digit',

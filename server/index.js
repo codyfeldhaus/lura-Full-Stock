@@ -4,7 +4,8 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const apiCall = require('./api'); // Import the apiCall function
+const { apiCall, apiCallGetCompanyName } = require('./api'); 
+
 
 const app = express();
 app.use(cors());
@@ -95,16 +96,19 @@ app.get('/search', async (req, res) => {
     const searchQuery = req.query.q.toLowerCase();
     console.log("search query:", searchQuery);
     const responseData = await apiCall(searchQuery);
-    const openPrice = responseData.open;
+    const open = responseData.open;
     const symbol = responseData.symbol; 
-    const name = responseData.name
     const close = responseData.close;
     const high = responseData.high;
     const low = responseData.low;
-    console.log("app.get /search responseData.open: ", responseData.open);
-    res.json({ openPrice, symbol, close, high, low });
+    const responseDataName = await apiCallGetCompanyName(searchQuery);
+    const company_name = responseDataName.results.name;
+    console.log("app.get /search company_name: ", company_name);
+    //console.log("app get responseDataName", responseDataName);
+    res.json({ company_name, open, symbol, close, high, low });
   } catch (error) {
-    console.error('Error: Response data is null or missing openPrice property');
+
+    console.error('Error: Response data is null or missing open property');
     console.error('Error during search:', error);
     res.status(500).send('Internal Server Error');
   }
@@ -128,9 +132,9 @@ app.get('/dashboard/stocks', async (req, res) => {
 })
 
 app.post('/add', async (req, res) => {
-  const { openPrice, symbol, name, close, high, low } = req.body; 
+  const { open, symbol, company_name, close, high, low } = req.body; 
   try {
-    await pool.query('INSERT INTO stock_adds (add_price, symbol, name, close, high, low, user_id, ) VALUES ($1, $2, $3, $4, $5, $6, $7)', [openPrice, symbol, "company", close, high, low, 1, ]);
+    await pool.query('INSERT INTO stock_adds (open, symbol, company_name, close, high, low, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7)', [open, symbol, company_name, close, high, low, 1 ]);
     res.status(200).send("Stock added successfully");
   } catch (error) {
     console.error('Error during stock add:', error);

@@ -49,9 +49,9 @@ const Taskbar = ({ onStockAdd }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          openPrice: searchResults.openPrice, 
+          open: searchResults.open, 
           symbol: searchResults.symbol,
-          name: searchResults.name,
+          company_name: searchResults.company_name,
           close: searchResults.close,
           high: searchResults.high,
           low: searchResults.low, 
@@ -91,7 +91,7 @@ const Taskbar = ({ onStockAdd }) => {
             <Col xs={2} className="text-center">
               {searchResults && (
                 <div style={{ border: '1px solid black', padding: '10px', position: 'relative' }}>
-                  <p>{searchResults.symbol} opened at ${searchResults.openPrice}.</p>
+                  <p>{searchResults.symbol} opened at ${searchResults.open}.</p>
                   <Button variant="outline-secondary" style={{ position: 'absolute', top: 0, right: 0 }} onClick={handleAddToDashboard}>+</Button>
                 </div>
               )}
