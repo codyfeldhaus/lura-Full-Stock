@@ -55,9 +55,11 @@ const Taskbar = ({ onStockAdd }) => {
           close: searchResults.close,
           high: searchResults.high,
           low: searchResults.low, 
+          company_name: searchResults.company_name
         }),
       });
       if (response.ok) {
+
         onStockAdd(searchResults);
         alert('Stock added successfully');
       } else {
@@ -74,7 +76,7 @@ const Taskbar = ({ onStockAdd }) => {
       <Navbar.Collapse id="basic-navbar-nav">
         <Container fluid>
           <Row className="align-items-center">
-            <Col xs={3}>
+            <Col lg="3">
               <Form onSubmit={handleSearchSubmit}>
                 <FormControl 
                   type="text" 
@@ -85,28 +87,27 @@ const Taskbar = ({ onStockAdd }) => {
                 />
               </Form>
             </Col>
-            <Col xs={1} className="d-flex justify-content-left">
+            <Col lg="1" className="d-flex">
               <Button variant="outline-primary" type="submit" onClick={handleSearchSubmit}>Search</Button>
             </Col>
-            <Col xs={2} className="text-center">
+            <Col lg="4" className="text-center">
               {searchResults && (
-                <div style={{ border: '1px solid black', padding: '10px', position: 'relative' }}>
-                  <p>{searchResults.symbol} opened at ${searchResults.open}.</p>
-                  <Button variant="outline-secondary" style={{ position: 'absolute', top: 0, right: 0 }} onClick={handleAddToDashboard}>+</Button>
+                <div className="d-flex justify-content-around p-2 border border-dark align-items-center">
+                  <h5 className="mb-0">{searchResults.symbol} opened at ${parseFloat(searchResults.open).toFixed(2)}.</h5>
+                  <Button variant="outline-secondary" onClick={handleAddToDashboard}>+</Button>
                 </div>
               )}
             </Col>
-            <Col xs={6} className="d-flex justify-content-end">
-              <Button variant="outline-success" className="mr-2">Home</Button>
-              <Button variant="outline-success" className="mr-2" onClick={handleRefreshClick}>Refresh</Button>
-              <Button variant="outline-danger" className="mr-2" onClick={handleLogout}>Logout</Button>
-              <div style={{ border: '1px solid red', padding: '5px' }}>Total Portfolio: $1000</div>
+            <Col lg="4" className="d-flex justify-content-between">
+              <Button variant="outline-success" className="mx-2">Home</Button>
+              <Button variant="outline-success" className="mx-2" onClick={handleRefreshClick}>Refresh</Button>
+              <Button variant="outline-danger" className="mx-2" onClick={handleLogout}>Logout</Button>
             </Col>
           </Row>
         </Container>
       </Navbar.Collapse>
     </Navbar>
   );
-              }
+}
 
 export default Taskbar;

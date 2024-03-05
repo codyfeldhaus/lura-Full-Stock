@@ -44,29 +44,24 @@ const Dashboard = () => {
   return (
     <div>
       <Taskbar onStockAdd={addStockToDashboard} />
-      <div>
+      <div className='container'>
         <h2 style={{ textAlign: 'center' }}>Selected Stocks</h2>
-        <ul>
+        <ul className='mt-5'>
           {selectedStocks.map((stock, index) => {
             console.log('Open price for stock', stock.symbol, 'is', stock.open);
             return (
               <li key={index}>
                 {stock.symbol} company {stock.company_name} add {stock.open} close {stock.close} high {stock.high} low {stock.low}
-                <button onClick={() => removeStockFromDashboard(index)}
-                className="btn btn-danger rounded-circle"
-                >
-                    x   
-
-                </button>
-
+                <button onClick={() => removeStockFromDashboard(index)} className="btn btn-danger rounded-circle">x</button>
+                <StockCard stock={stock} handleDelete={removeStockFromDashboard} />
               </li>
             );
           })}
         </ul>
       </div>
-
     </div>
   );
 }
 
 export default Dashboard;
+
