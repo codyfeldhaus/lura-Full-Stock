@@ -38,3 +38,6 @@ ALTER COLUMN low TYPE DECIMAL(10, 2);
 
 ALTER TABLE stock_adds
 RENAME COLUMN add_price TO open;
+
+ALTER TABLE stock_adds
+ADD COLUMN date

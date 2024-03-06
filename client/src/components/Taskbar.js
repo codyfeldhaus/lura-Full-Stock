@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Navbar, Button, Form, FormControl, Container, Row, Col } from 'react-bootstrap';
 
-const Taskbar = ({ onStockAdd }) => {
+const Taskbar = ({ onStockAdd, totalPortfolio }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState(null);
 
@@ -59,7 +59,6 @@ const Taskbar = ({ onStockAdd }) => {
         }),
       });
       if (response.ok) {
-
         onStockAdd(searchResults);
         alert('Stock added successfully');
       } else {
@@ -72,7 +71,7 @@ const Taskbar = ({ onStockAdd }) => {
   };
 
   return (
-    <Navbar bg="light" expand="lg" className="border-bottom">
+    <Navbar style={{ backgroundColor: '#D5C67A', font: '#17301C'}} expand="lg" className="border-bottom">
       <Navbar.Collapse id="basic-navbar-nav">
         <Container fluid>
           <Row className="align-items-center">
@@ -100,8 +99,9 @@ const Taskbar = ({ onStockAdd }) => {
             </Col>
             <Col lg="4" className="d-flex justify-content-between">
               <Button variant="outline-success" className="mx-2">Home</Button>
-              <Button variant="outline-success" className="mx-2" onClick={handleRefreshClick}>Refresh</Button>
+              <Button variant="outline-success" className="mx-2" onClick={handleRefreshClick}>clear</Button>
               <Button variant="outline-danger" className="mx-2" onClick={handleLogout}>Logout</Button>
+              <div style={{ border: '1px solid red', padding: '5px' }}>Total Portfolio: {isNaN(totalPortfolio) ? 0 : totalPortfolio}</div> 
             </Col>
           </Row>
         </Container>

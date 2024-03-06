@@ -1,6 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const StockCard = ({ stock, handleDelete }) => {
+  const currentDate = new Date().toLocaleDateString();
+  const [shares, setShares] = useState(0);
+
+  const handleSharesChange = (event) => {
+    setShares(event.target.value);
+  };
+
+  const handleAddShares = () => {
+    alert(`Added ${shares} shares of ${stock.symbol}`);
+    // Add logic here to update total shares or perform other actions
+  };
+
   return (
     <div className="card mb-3" style={{ backgroundColor: '#d9edf7' }}>
       <div className="card-body" style={{ color: 'black' }}>
@@ -13,16 +25,24 @@ const StockCard = ({ stock, handleDelete }) => {
               <strong>Symbol:</strong> {stock.symbol}
             </div>
             <div className="col p-4">
-              <strong>Open Price on {stock.add_date || "DATE*"}: </strong> ${parseFloat(stock.open).toFixed(2) || "ADD PRICE MISSING"}
+              <strong>Open Price on {currentDate}: </strong> ${parseFloat(stock.open).toFixed(2) || "ADD PRICE MISSING"}
             </div>
             <div className="col p-4">
-              <strong>Close Price on {stock.add_date || "DATE*"}:</strong> {parseFloat(stock.close).toFixed(2) || "CLOSE MISSING"}
+              <strong>Close Price on {currentDate}:</strong> {parseFloat(stock.close).toFixed(2) || "CLOSE MISSING"}
             </div>
             <div className="col p-4">
-              <strong>High Price on {stock.add_date || "DATE*"}:</strong> {parseFloat(stock.high).toFixed(2) || "HIGH MISSING"}
+              <strong>High Price on {currentDate}:</strong> {parseFloat(stock.high).toFixed(2) || "HIGH MISSING"}
             </div>
             <div className="col p-4">
-              <strong>Low Price on {stock.add_date || "DATE*"}:</strong> {parseFloat(stock.low).toFixed(2) || "LOW MISSING"}
+              <strong>Low Price on {currentDate}:</strong> {parseFloat(stock.low).toFixed(2) || "LOW MISSING"}
+            </div>
+            <div className='col p-4'>
+              <div className="input-group">
+                <input type="number" className="form-control" value={shares} onChange={handleSharesChange} />
+                <div className="input-group-append">
+                  <button className="btn btn-primary" type="button" onClick={handleAddShares}>Add Shares</button>
+                </div>
+              </div>
             </div>
             <div className='col-auto'>
               <button className='btn btn-danger' onClick={() => handleDelete(stock.id)}>-</button>

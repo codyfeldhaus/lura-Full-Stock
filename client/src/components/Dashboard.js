@@ -5,58 +5,40 @@ import StockCard from './Stockcard';
 
 const Dashboard = () => {
   const [selectedStocks, setSelectedStocks] = useState([]);
+  const [totalPortfolio, setTotalPortfolio] = useState(0);
+
+  useEffect(() => {
+    // Fetch data or perform other initialization logic here
+  }, []);
 
   const addStockToDashboard = (stock) => {
     setSelectedStocks([...selectedStocks, stock]);
+    updateTotalPortfolio([...selectedStocks, stock]);
   };
 
   const removeStockFromDashboard = (index) => {
     const newSelectedStocks = [...selectedStocks];
     newSelectedStocks.splice(index, 1);
     setSelectedStocks(newSelectedStocks);
+    updateTotalPortfolio(newSelectedStocks);
   };
 
-  useEffect(() => {
-    console.log("useEffect in Dashboard.js ran");
-    const fetchStockData = async () => {
-      console.log("fetchStockData ran");
-      try {
-        const response = await fetch('http://localhost:3001/dashboard/stocks', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer YOUR_JWT_TOKEN`, // Replace with your JWT token
-            'Content-Type': 'application/json'
-          }
-        });
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Fetched stock data:', data);
-          setSelectedStocks(data);
-        }
-      } catch (error) {
-        console.error('Error fetching stock data:', error);
-      }
-    };
-    console.log("useEffect helper loaded");
-    fetchStockData();
-  }, []);
+  const updateTotalPortfolio = (stocks) => {
+    const total = stocks.reduce((acc, stock) => acc + (stock.open || 0), 0);
+    setTotalPortfolio(total);
+  };
 
   return (
     <div>
-      <Taskbar onStockAdd={addStockToDashboard} />
+      <Taskbar onStockAdd={addStockToDashboard} totalPortfolio={totalPortfolio} />
       <div className='container'>
         <h2 style={{ textAlign: 'center' }}>Selected Stocks</h2>
         <ul className='mt-5'>
-          {selectedStocks.map((stock, index) => {
-            console.log('Open price for stock', stock.symbol, 'is', stock.open);
-            return (
-              <li key={index}>
-                {stock.symbol} company {stock.company_name} add {stock.open} close {stock.close} high {stock.high} low {stock.low}
-                <button onClick={() => removeStockFromDashboard(index)} className="btn btn-danger rounded-circle">x</button>
-                <StockCard stock={stock} handleDelete={removeStockFromDashboard} />
-              </li>
-            );
-          })}
+          {selectedStocks.map((stock, index) => (
+            <li key={index}>
+              <StockCard stock={stock} handleDelete={() => removeStockFromDashboard(index)} updateTotalPortfolio={updateTotalPortfolio} />
+            </li>
+          ))}
         </ul>
       </div>
     </div>
@@ -64,4 +46,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard;
-
