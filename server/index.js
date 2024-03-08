@@ -120,6 +120,7 @@ app.get('/dashboard/stocks', async (req, res) => {
   try {
     const query = 'SELECT * FROM stock_adds';
     const { rows } = await pool.query(query);
+    console.log("********************************")
     console.log("returned rows:", rows);
     res.status(200).json(rows);
     

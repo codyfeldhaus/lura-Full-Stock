@@ -71,7 +71,7 @@ const Taskbar = ({ onStockAdd, totalPortfolio }) => {
   };
 
   return (
-    <Navbar style={{ backgroundColor: '#D5C67A', font: '#17301C'}} expand="lg" className="border-bottom">
+    <Navbar style={{ backgroundColor: '#aba8b2', font: '#17301C'}} expand="lg" className="border-bottom">
       <Navbar.Collapse id="basic-navbar-nav">
         <Container fluid>
           <Row className="align-items-center">
@@ -79,7 +79,7 @@ const Taskbar = ({ onStockAdd, totalPortfolio }) => {
               <Form onSubmit={handleSearchSubmit}>
                 <FormControl 
                   type="text" 
-                  placeholder="Search" 
+                  placeholder="Ticker Symbol" 
                   value={searchQuery} 
                   onChange={handleSearchInputChange} 
                   className="w-100"
@@ -87,21 +87,20 @@ const Taskbar = ({ onStockAdd, totalPortfolio }) => {
               </Form>
             </Col>
             <Col lg="1" className="d-flex">
-              <Button variant="outline-primary" type="submit" onClick={handleSearchSubmit}>Search</Button>
+              <Button variant="outline-dark" type="submit" onClick={handleSearchSubmit}>Search</Button>
             </Col>
             <Col lg="4" className="text-center">
               {searchResults && (
                 <div className="d-flex justify-content-around p-2 border border-dark align-items-center">
                   <h5 className="mb-0">{searchResults.symbol} opened at ${parseFloat(searchResults.open).toFixed(2)}.</h5>
-                  <Button variant="outline-secondary" onClick={handleAddToDashboard}>+</Button>
+                  <Button className='btn-secondary' onClick={handleAddToDashboard}>+</Button>
                 </div>
               )}
             </Col>
             <Col lg="4" className="d-flex justify-content-between">
-              <Button variant="outline-success" className="mx-2">Home</Button>
-              <Button variant="outline-success" className="mx-2" onClick={handleRefreshClick}>clear</Button>
-              <Button variant="outline-danger" className="mx-2" onClick={handleLogout}>Logout</Button>
-              <div style={{ border: '1px solid red', padding: '5px' }}>Total Portfolio: {isNaN(totalPortfolio) ? 0 : totalPortfolio}</div> 
+              <Button variant="outline-dark" className="mx-2" onClick={handleRefreshClick}>clear</Button>
+              <Button variant="outline-dark" className="mx-2" onClick={handleLogout}>Logout</Button>
+              <div style={{ border: '1px solid ', padding: '5px' }}>Total Portfolio: {isNaN(totalPortfolio) ? 0 : totalPortfolio}</div> 
             </Col>
           </Row>
         </Container>

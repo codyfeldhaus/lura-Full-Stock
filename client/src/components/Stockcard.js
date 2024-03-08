@@ -14,8 +14,8 @@ const StockCard = ({ stock, handleDelete }) => {
   };
 
   return (
-    <div className="card mb-3" style={{ backgroundColor: '#d9edf7' }}>
-      <div className="card-body" style={{ color: 'black' }}>
+    <div className="card mb-3" style={{ backgroundColor: '#070049' }}>
+      <div className="card-body" style={{ color: 'white' }}>
         <div className="container">
           <div className="row align-items-center">
             <div className="col p-4">
@@ -40,12 +40,12 @@ const StockCard = ({ stock, handleDelete }) => {
               <div className="input-group">
                 <input type="number" className="form-control" value={shares} onChange={handleSharesChange} />
                 <div className="input-group-append">
-                  <button className="btn btn-primary" type="button" onClick={handleAddShares}>Add Shares</button>
+                  <button className="btn btn-info" type="button" onClick={handleAddShares}>Add Shares</button>
                 </div>
               </div>
             </div>
             <div className='col-auto'>
-              <button className='btn btn-danger' onClick={() => handleDelete(stock.id)}>-</button>
+              <button className='btn btn-secondary' onClick={() => handleDelete(stock.id)}>x</button>
             </div>
           </div>
           {/* Additional grid or details */}
