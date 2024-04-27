@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { apiCall, apiCallGetCompanyName } = require('./api'); 
 
-
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -37,16 +36,16 @@ function authenticateToken(req, res, next) {
 }
 
 // Route to fetch user's stocks for the dashboard
-// app.get('/dashboard/stocks', authenticateToken, async (req, res) => {
-//   try {
-//     const query = 'SELECT * FROM stock_adds WHERE user_id = $1'; 
-//     const { rows } = await pool.query(query, [req.user.user_id]);
-//     res.status(200).json(rows);
-//   } catch (error) {
-//     console.error('Error fetching stocks for dashboard:', error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
+app.get('/dashboard/stocks', async (req, res) => {
+  try {
+    const query = 'SELECT * FROM stock_adds WHERE user_id = $1'; 
+    const { rows } = await pool.query(query, [req.user.user_id]);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('Error fetching stocks for dashboard:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
@@ -83,7 +82,7 @@ app.post('/register', async (req, res) => {
     console.error('Error during registration', error);
     res.status(500).send('Internal Server Error');
   }
-})
+});
 
 // Logout endpoint
 app.post('/logout', (req, res) => {
@@ -112,33 +111,54 @@ app.get('/search', async (req, res) => {
     console.error('Error during search:', error);
     res.status(500).send('Internal Server Error');
   }
-  })
-
+});
 
 app.get('/dashboard/stocks', async (req, res) => {
   console.log("app.get /db/stocks reached");
   try {
-    const query = 'SELECT * FROM stock_adds';
-    const { rows } = await pool.query(query);
+    const query = 'SELECT * FROM stock_adds WHERE user_id = $1';
+    const { rows } = await pool.query(query, [req.user.user_id]);
     console.log("********************************")
     console.log("returned rows:", rows);
     res.status(200).json(rows);
     
   } catch (error) {
     console.error('error fetching stocks', error);
-    res.status(500).send('Internal Server Error')
-    
+    res.status(500).send('Internal Server Error');
   }
-  //code to call db and get stocks here
-})
+});
 
 app.post('/add', async (req, res) => {
   const { open, symbol, company_name, close, high, low } = req.body; 
   try {
-    await pool.query('INSERT INTO stock_adds (open, symbol, company_name, close, high, low, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7)', [open, symbol, company_name, close, high, low, 1 ]);
+    await pool.query('INSERT INTO stock_adds (open, symbol, company_name, close, high, low, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7)', [open, symbol, company_name, close, high, low, req.user.user_id ]);
     res.status(200).send("Stock added successfully");
   } catch (error) {
     console.error('Error during stock add:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.delete('/delete/:stockId', async (req, res) => {
+  const stockId = req.params.stockId;
+
+  try {
+    // First, check if the stock exists
+    const checkQuery = 'SELECT * FROM stock_adds WHERE id = $1';
+    const { rowCount } = await pool.query(checkQuery, [stockId]);
+
+    if (rowCount === 0) {
+      return res.status(404).send('Stock not found');
+    }
+
+    // If the stock exists, proceed with deletion
+    const deleteQuery = 'DELETE FROM stock_adds WHERE id = $1';
+    await pool.query(deleteQuery, [stockId]);
+    
+    // Send a success response
+    res.status(200).send('Stock removed successfully');
+  } catch (error) {
+    console.error('Error during stock deletion:', error);
     res.status(500).send('Internal Server Error');
   }
 });

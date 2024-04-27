@@ -19,7 +19,6 @@ const Dashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log("DATA IS: ", data);
           setSelectedStocks(data);
         }
       } catch (error) {
@@ -30,7 +29,6 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    console.log("useEffect to update total ran")
     updateTotalPortfolio(selectedStocks);
   }, [selectedStocks]);
 
@@ -38,16 +36,26 @@ const Dashboard = () => {
     setSelectedStocks([...selectedStocks, stock]);
   };
 
-  const removeStockFromDashboard = (index) => {
-    const newSelectedStocks = [...selectedStocks];
-    newSelectedStocks.splice(index, 1);
-    setSelectedStocks(newSelectedStocks);
+  const removeStockFromDashboard = async (stockId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/delete/${stockId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer YOUR_JWT_TOKEN`, // Replace with your JWT token
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        const updatedStocks = selectedStocks.filter(stock => stock.id !== stockId);
+        setSelectedStocks(updatedStocks);
+      }
+    } catch (error) {
+      console.error('Error removing stock:', error);
+    }
   };
 
   const updateTotalPortfolio = (stocks) => {
-    console.log("updateTotalPortfolio ran")
     const total = stocks.reduce((acc, stock) => acc + (parseFloat(stock.open) || 0), 0);
-    console.log("stock total is ", total);
     setTotalPortfolio(total);
   };
 
@@ -57,9 +65,9 @@ const Dashboard = () => {
       <div className='container' style={{ backgroundColor: '', maxHeight: '400px', overflowY: 'auto' }}>
         <h2 style={{ textAlign: 'center' }}>Selected Stocks</h2>
         <ul className='mt-5 list-unstyled'>
-          {selectedStocks.map((stock, index) => (
-            <li key={index}>
-              <StockCard stock={stock} handleDelete={() => removeStockFromDashboard(index)} />
+          {selectedStocks.map((stock) => (
+            <li key={stock.id}>
+              <StockCard stock={stock} handleDelete={() => removeStockFromDashboard(stock.id)} />
             </li>
           ))}
         </ul>
