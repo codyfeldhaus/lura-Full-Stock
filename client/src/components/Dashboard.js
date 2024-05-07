@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 import Taskbar from './Taskbar';
 import StockCard from './Stockcard';
 
-const Dashboard = () => {
+
+const Dashboard = ({ isLoggedIn, setIsLoggedIn, token, setToken, userId, setUserId}) => {
   const [selectedStocks, setSelectedStocks] = useState([]);
   const [totalPortfolio, setTotalPortfolio] = useState(0);
+  
 
   useEffect(() => {
     const fetchStockData = async () => {
@@ -13,13 +15,15 @@ const Dashboard = () => {
         const response = await fetch('http://localhost:3001/dashboard/stocks', {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer YOUR_JWT_TOKEN`, // Replace with your JWT token
+            'Authorization': `Bearer ${token}`, // Replace with your JWT token
             'Content-Type': 'application/json'
-          }
+          },
+          userId: userId
         });
         if (response.ok) {
           const data = await response.json();
           setSelectedStocks(data);
+          console.log('Fetched stock data:', data); // testing
         }
       } catch (error) {
         console.error('Error fetching stock data:', error);
@@ -34,6 +38,7 @@ const Dashboard = () => {
 
   const addStockToDashboard = (stock) => {
     setSelectedStocks([...selectedStocks, stock]);
+    console.log('Stock added to dashboard:', stock); // testing
   };
 
   const removeStockFromDashboard = async (stockId) => {
@@ -57,11 +62,12 @@ const Dashboard = () => {
   const updateTotalPortfolio = (stocks) => {
     const total = stocks.reduce((acc, stock) => acc + (parseFloat(stock.open) || 0), 0);
     setTotalPortfolio(total);
+    console.log('Updated total portfolio:', total);// testing 
   };
 
   return (
     <div>
-      <Taskbar onStockAdd={addStockToDashboard} totalPortfolio={totalPortfolio} />
+      <Taskbar onStockAdd={addStockToDashboard} totalPortfolio={totalPortfolio} userId={userId} />
       <div className='container' style={{ backgroundColor: '', maxHeight: '400px', overflowY: 'auto' }}>
         <h2 style={{ textAlign: 'center' }}>Selected Stocks</h2>
         <ul className='mt-5 list-unstyled'>

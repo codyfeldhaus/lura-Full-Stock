@@ -37,9 +37,10 @@ function authenticateToken(req, res, next) {
 
 // Route to fetch user's stocks for the dashboard
 app.get('/dashboard/stocks', async (req, res) => {
+  console.log("/db/stocks get req.body", req.body)
   try {
     const query = 'SELECT * FROM stock_adds WHERE user_id = $1'; 
-    const { rows } = await pool.query(query, [req.user.user_id]);
+    const { rows } = await pool.query(query, [req.userId]);
     res.status(200).json(rows);
   } catch (error) {
     console.error('Error fetching stocks for dashboard:', error);
@@ -59,7 +60,8 @@ app.post('/login', async (req, res) => {
           process.env.JWT_SECRET,
           { expiresIn: '1h' }
         );
-        res.json({ token });
+        const userId = rows[0].user_id
+        res.json({ token, userId });
       } else {
         res.status(403).send('Invalid password');
       }
@@ -114,10 +116,10 @@ app.get('/search', async (req, res) => {
 });
 
 app.get('/dashboard/stocks', async (req, res) => {
-  console.log("app.get /db/stocks reached");
+  console.log('Received request to fetch dashboard stocks');
   try {
     const query = 'SELECT * FROM stock_adds WHERE user_id = $1';
-    const { rows } = await pool.query(query, [req.user.user_id]);
+    const { rows } = await pool.query(query, [req.body.userId]);
     console.log("********************************")
     console.log("returned rows:", rows);
     res.status(200).json(rows);
@@ -129,9 +131,11 @@ app.get('/dashboard/stocks', async (req, res) => {
 });
 
 app.post('/add', async (req, res) => {
-  const { open, symbol, company_name, close, high, low } = req.body; 
+  console.log("post /add req.body", req.body);
+  const { open, symbol, company_name, close, high, low, userId } = req.body; 
   try {
-    await pool.query('INSERT INTO stock_adds (open, symbol, company_name, close, high, low, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7)', [open, symbol, company_name, close, high, low, req.user.user_id ]);
+    console.log('Adding stock to database:', req.body); // testing
+    await pool.query('INSERT INTO stock_adds (open, symbol, company_name, close, high, low, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7)', [open, symbol, company_name, close, high, low, userId ]);
     res.status(200).send("Stock added successfully");
   } catch (error) {
     console.error('Error during stock add:', error);

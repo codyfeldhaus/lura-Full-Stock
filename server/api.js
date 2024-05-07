@@ -7,7 +7,7 @@ const apiCall = async (stockQuery) => {
    const today = new Date();
    // Subtract one day
    const yesterday = new Date(today);
-   yesterday.setDate(yesterday.getDate() - 2);
+   yesterday.setDate(yesterday.getDate() - 1);
    // Format as YYYY-MM-DD
    const formattedYesterday = yesterday.toISOString().split('T')[0];
    console.log(formattedYesterday); 

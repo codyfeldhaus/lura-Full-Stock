@@ -42,4 +42,4 @@ RENAME COLUMN add_price TO open;
 ALTER TABLE stock_adds
 ADD COLUMN date
 ALTER TABLE stock_adds
-ADD COLUMN balance DECIMAL(10, 2) DEFAULT 500;
+DROP COLUMN balance;

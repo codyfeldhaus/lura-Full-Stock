@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken }) => {
+const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setUserId}) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -21,10 +21,11 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken }) => {
       });
       console.log (response);
       if (response.ok) {
-        const { token } = await response.json();
-        console.log (token);
+        const { token, userId} = await response.json();
+        console.log ("token.user_id", token.user_id);
         setToken(token);
         setIsLoggedIn(true);
+        setUserId(userId);
         navigate("/dashboard")
       } else {
         const errorMessage = await response.text();
