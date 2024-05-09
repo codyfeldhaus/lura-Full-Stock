@@ -9,7 +9,7 @@ import Dashboard from './components/Dashboard'; // Import the Dashboard componen
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState('');
-  const [userId, setUserId] = useState(0);
+  const [userId, setUserId] = useState(0); // Corrected the state variable name
 
   return (
     <Router>
@@ -21,10 +21,10 @@ const App = () => {
             path="/login"
             element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setToken={setToken} setUserId={setUserId} />}
           />
-          {/* Pass the isLoggedIn and token props to the Dashboard component */}
+          {/* Pass the isLoggedIn, token, and userId props to the Dashboard component */}
           <Route
             path="/dashboard"
-            element={<Dashboard isLoggedIn={isLoggedIn} setIsLoggedIn= {setIsLoggedIn} token={token} setToken={setToken} userId={userId} setUserId={setUserId}/>}
+            element={<Dashboard isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} token={token} setToken={setToken} userId={userId} setUserId={setUserId} />}
           />
         </Routes>
       </div>

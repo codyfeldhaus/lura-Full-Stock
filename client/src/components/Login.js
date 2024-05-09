@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setUserId}) => {
+
+const Login = ({ setIsLoggedIn, setToken, setUserId }) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -38,11 +39,12 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setUserId}) => {
       setIsLoading(false);
     }
   };
+  
   return (
     <div>
       <div>
         <Link to="/">
-         
+          {/* Add your home link text here */}
         </Link>
         <Link to="/login">
           <button className="btn btn-primary mr-2">Login</button>

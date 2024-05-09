@@ -26,17 +26,17 @@ function authenticateToken(req, res, next) {
     return res.sendStatus(401); // Unauthorized
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       return res.sendStatus(403); // Forbidden
     }
-    req.user = user;
+    req.user_id = decoded.user_id; // Attach user_id to request object
     next();
   });
 }
 
 // Route to fetch user's stocks for the dashboard
-app.get("/dashboard/stocks", async (req, res) => {
+app.get("/dashboard/stocks", authenticateToken, async (req, res) => {
   console.log("/db/stocks get req.body", req.body);
   try {
     const user_id = req.query.userId; // Access user_id from query parameters
@@ -123,14 +123,14 @@ app.get("/search", async (req, res) => {
   }
 });
 
-app.post("/add", async (req, res) => {
+app.post("/add", authenticateToken, async (req, res) => {
   console.log("post /add req.body", req.body);
-  const { open, symbol, company_name, close, high, low, user_id } = req.body;
+  const { open, symbol, company_name, close, high, low, user_id } = req.body; // Ensure user_id is correctly extracted from req.body
   try {
     console.log("Adding stock to database:", req.body); // testing
     await pool.query(
       "INSERT INTO stock_adds (open, symbol, company_name, close, high, low, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-      [open, symbol, company_name, close, high, low, user_id]
+      [open, symbol, company_name, close, high, low, user_id] // Make sure user_id is included in the query
     );
     res.status(200).send("Stock added successfully");
   } catch (error) {
@@ -139,3 +139,7 @@ app.post("/add", async (req, res) => {
   }
 });
 
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
