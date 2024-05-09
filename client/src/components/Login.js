@@ -11,7 +11,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setUserId}) => {
   const handleLogin = async () => {
     try {
       setIsLoading(true);
-
+  
       const response = await fetch('http://localhost:3001/login', {
         method: 'POST',
         headers: {
@@ -19,14 +19,14 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setUserId}) => {
         },
         body: JSON.stringify({ username, password }),
       });
-      console.log (response);
+  
       if (response.ok) {
-        const { token: { userId } } = await response.json();
-        console.log ("token.userId", token.userId);
+        const { token, userId } = await response.json(); // Ensure userId is correctly received
+        console.log("userId:", userId); // Check if userId is received correctly
         setToken(token);
         setIsLoggedIn(true);
         setUserId(userId);
-        navigate("/dashboard")
+        navigate("/dashboard");
       } else {
         const errorMessage = await response.text();
         alert(`Login failed: ${errorMessage}`);
@@ -38,8 +38,6 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setUserId}) => {
       setIsLoading(false);
     }
   };
-
-
   return (
     <div>
       <div>

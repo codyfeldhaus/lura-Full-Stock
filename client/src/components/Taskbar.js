@@ -1,15 +1,7 @@
 import React, { useState } from "react";
-import {
-  Navbar,
-  Button,
-  Form,
-  FormControl,
-  Container,
-  Row,
-  Col,
-} from "react-bootstrap";
+import { Navbar, Button, Form, FormControl, Container, Row, Col } from "react-bootstrap";
 
-const Taskbar = ({ onStockAdd, totalPortfolio, userId }) => {
+const Taskbar = ({ onStockAdd, totalPortfolio, token, user_id }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState(null);
 
@@ -20,25 +12,23 @@ const Taskbar = ({ onStockAdd, totalPortfolio, userId }) => {
   const handleSearchSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(
-        `http://localhost:3001/search?q=${searchQuery}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer YOUR_JWT_TOKEN`, // Replace with your JWT token
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:3001/search?q=${searchQuery}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       if (response.ok) {
         const data = await response.json();
-        console.log("received data from server:", data);
         setSearchResults(data);
       } else {
         console.error("Error fetching search results:", response.statusText);
+        alert("Failed to fetch search results");
       }
     } catch (error) {
       console.error("Error fetching search results:", error);
+      alert("Failed to fetch search results");
     }
   };
 
@@ -51,14 +41,12 @@ const Taskbar = ({ onStockAdd, totalPortfolio, userId }) => {
   };
 
   const handleAddToDashboard = async () => {
-    console.log("inside handleAddToDashboard");
-    console.log("searchResults:", searchResults);
     try {
       const response = await fetch("http://localhost:3001/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'Authorization': `Bearer YOUR_JWT_TOKEN`, // Replace with your JWT token
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           open: searchResults.open,
@@ -67,13 +55,14 @@ const Taskbar = ({ onStockAdd, totalPortfolio, userId }) => {
           close: searchResults.close,
           high: searchResults.high,
           low: searchResults.low,
-          userId: userId,
+          user_id: user_id, // Use user_id instead of userId
         }),
       });
       if (response.ok) {
         onStockAdd(searchResults);
         alert("Stock added successfully");
       } else {
+        console.error("Failed to add stock:", response.statusText);
         alert("Failed to add stock");
       }
     } catch (error) {
@@ -84,7 +73,7 @@ const Taskbar = ({ onStockAdd, totalPortfolio, userId }) => {
 
   return (
     <Navbar
-      style={{ backgroundColor: "#aba8b2", font: "#17301C" }}
+      style={{ backgroundColor: "#aba8b2", color: "#17301C" }}
       expand="lg"
       className="border-bottom"
     >
@@ -115,7 +104,7 @@ const Taskbar = ({ onStockAdd, totalPortfolio, userId }) => {
               {searchResults && (
                 <div className="d-flex justify-content-around p-2 border border-dark align-items-center">
                   <h5 className="mb-0">
-                    {searchResults.symbol} opened at $
+                    {searchResults.symbol} ({searchResults.company_name}) opened at $
                     {parseFloat(searchResults.open).toFixed(2)}.
                   </h5>
                   <Button
@@ -133,7 +122,7 @@ const Taskbar = ({ onStockAdd, totalPortfolio, userId }) => {
                 className="mx-2"
                 onClick={handleRefreshClick}
               >
-                clear
+                Clear
               </Button>
               <Button
                 variant="outline-dark"

@@ -39,9 +39,9 @@ function authenticateToken(req, res, next) {
 app.get("/dashboard/stocks", async (req, res) => {
   console.log("/db/stocks get req.body", req.body);
   try {
-    const userId = req.query.userId; // Access userId from query parameters
+    const user_id = req.query.userId; // Access user_id from query parameters
     const query = "SELECT * FROM stock_adds WHERE user_id = $1";
-    const { rows } = await pool.query(query, [userId]);
+    const { rows } = await pool.query(query, [user_id]);
     console.log("stock added");
     console.log("returned rows:", rows);
     res.status(200).json(rows);
@@ -123,28 +123,14 @@ app.get("/search", async (req, res) => {
   }
 });
 
-app.get("/dashboard/stocks", async (req, res) => {
-  console.log("Received request to fetch dashboard stocks");
-  try {
-    const query = "SELECT * FROM stock_adds WHERE user_id = $1";
-    const { rows } = await pool.query(query, [req.body.userId]);
-    console.log("********************************");
-    console.log("returned rows:", rows);
-    res.status(200).json(rows);
-  } catch (error) {
-    console.error("error fetching stocks", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
 app.post("/add", async (req, res) => {
   console.log("post /add req.body", req.body);
-  const { open, symbol, company_name, close, high, low, userId } = req.body;
+  const { open, symbol, company_name, close, high, low, user_id } = req.body;
   try {
     console.log("Adding stock to database:", req.body); // testing
     await pool.query(
-      "INSERT INTO stock_adds (open, symbol, company_name, close, high, low, user_Id) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-      [open, symbol, company_name, close, high, low, userId]
+      "INSERT INTO stock_adds (open, symbol, company_name, close, high, low, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+      [open, symbol, company_name, close, high, low, user_id]
     );
     res.status(200).send("Stock added successfully");
   } catch (error) {
@@ -153,31 +139,3 @@ app.post("/add", async (req, res) => {
   }
 });
 
-app.delete("/delete/:stockId", async (req, res) => {
-  const stockId = req.params.stockId;
-
-  try {
-    // First, check if the stock exists
-    const checkQuery = "SELECT * FROM stock_adds WHERE id = $1";
-    const { rowCount } = await pool.query(checkQuery, [stockId]);
-
-    if (rowCount === 0) {
-      return res.status(404).send("Stock not found");
-    }
-
-    // If the stock exists, proceed with deletion
-    const deleteQuery = "DELETE FROM stock_adds WHERE id = $1";
-    await pool.query(deleteQuery, [stockId]);
-
-    // Send a success response
-    res.status(200).send("Stock removed successfully");
-  } catch (error) {
-    console.error("Error during stock deletion:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
