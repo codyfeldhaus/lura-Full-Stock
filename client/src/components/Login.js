@@ -21,8 +21,8 @@ const Login = ({ isLoggedIn, setIsLoggedIn, token, setToken, setUserId}) => {
       });
       console.log (response);
       if (response.ok) {
-        const { token, userId} = await response.json();
-        console.log ("token.user_id", token.user_id);
+        const { token: { userId } } = await response.json();
+        console.log ("token.userId", token.userId);
         setToken(token);
         setIsLoggedIn(true);
         setUserId(userId);

@@ -58,6 +58,7 @@ const Taskbar = ({ onStockAdd, totalPortfolio, userId }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer YOUR_JWT_TOKEN`, // Replace with your JWT token
         },
         body: JSON.stringify({
           open: searchResults.open,

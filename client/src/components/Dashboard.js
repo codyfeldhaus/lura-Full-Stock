@@ -12,13 +12,12 @@ const Dashboard = ({ isLoggedIn, setIsLoggedIn, token, setToken, userId, setUser
   useEffect(() => {
     const fetchStockData = async () => {
       try {
-        const response = await fetch('http://localhost:3001/dashboard/stocks', {
+        const response = await fetch(`http://localhost:3001/dashboard/stocks?userId=${userId}`, {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${token}`, // Replace with your JWT token
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
-          },
-          userId: userId
+          }
         });
         if (response.ok) {
           const data = await response.json();
@@ -30,7 +29,7 @@ const Dashboard = ({ isLoggedIn, setIsLoggedIn, token, setToken, userId, setUser
       }
     };
     fetchStockData();
-  }, []);
+}, [userId]); 
 
   useEffect(() => {
     updateTotalPortfolio(selectedStocks);
